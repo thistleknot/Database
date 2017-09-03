@@ -69,15 +69,19 @@ void MainWindow::on_actionOpen_triggered()
                //query.exec("drop database test;");
                 //query.exec("create database test;");
                 query.exec("use test;");
-                //QString temp = "source " + QString(fileName);
-                //qDebug() << temp << "source: filename";
-                //query.exec("source "+fileName);
+                //QString temp = "source ";
+                //temp = temp + fileName + ";";
+                //qDebug() << temp;
+                //query.exec(temp);
 
                 //return #
                 //https://stackoverflow.com/questions/10492164/how-do-i-count-columns-of-a-table
 
+               //correct query to return column #'s, unsure how to extract value
+
                query.exec("SELECT count(*) FROM information_schema.columns WHERE table_name = 'user_details';");
-               int count = query.value(0).toInt();
+
+               //QString count = query.value(1).toString();
                qDebug() << "count: " << count;
 
 
