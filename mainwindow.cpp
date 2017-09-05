@@ -55,9 +55,10 @@ void MainWindow::on_actionOpen_triggered()
 
            QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL");
            db.setHostName("localhost");
-           //db.setDatabaseName("test");
+           db.setDatabaseName("test");
            db.setUserName("root");
            db.setPassword("Raistlin");
+           //db.exec("drop database test;");
            if (!db.open()) {
                qDebug() << "Database error occurred";
                //return false;
@@ -69,10 +70,10 @@ void MainWindow::on_actionOpen_triggered()
                //query.exec("drop database test;");
                 //query.exec("create database test;");
                 query.exec("use test;");
-                //QString temp = "source ";
-                //temp = temp + fileName + ";";
-                //qDebug() << temp;
-                //query.exec(temp);
+                QString temp = "source C:/Users/user/Documents/School/NorthWind/Sample-SQL-File-100-Rows.sql;";
+                qDebug() << temp;
+                query.exec(temp);
+                query.next();
 
                 //return #
                 //https://stackoverflow.com/questions/10492164/how-do-i-count-columns-of-a-table
@@ -81,9 +82,13 @@ void MainWindow::on_actionOpen_triggered()
 
                query.exec("SELECT count(*) FROM information_schema.columns WHERE table_name = 'user_details';");
 
-               //QString count = query.value(1).toString();
-               qDebug() << "count: " << count;
+               //int count = query.value(0).toInt();
 
+               //http://doc.qt.io/qt-5/sql-sqlstatements.html
+               //#After the call to exec(), QSqlQuery's internal pointer is located one position before the first record. We must call QSqlQuery::next() once to advance to the first record,
+               query.next();
+               int count = query.value(0).toInt();
+               qDebug() << "count: " << count;
 
                query.exec(ui->textEditQuery->toPlainText());
                 //qDebug() << query.exec("select * from user_details;");
@@ -91,9 +96,8 @@ void MainWindow::on_actionOpen_triggered()
                //dumps text
                while (query.next()) {
 
-                   //magic number bug
                    int x=0;
-                    while (x<7)
+                    while (x<count)
                     {
                    name = name + query.value(x).toString() + "\t";
                    x++;
